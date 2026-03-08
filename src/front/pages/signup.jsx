@@ -1,50 +1,59 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Signup = () => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
+
         e.preventDefault()
 
-        const resp = await fetch(process.env.BACKEND_URL + "/api/signup", {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+        const resp = await fetch(backendUrl + "/api/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: email,
-                password: password
+                email,
+                password
             })
         })
 
         const data = await resp.json()
 
         console.log(data)
+
+        navigate("/login")
     }
 
     return (
 
-        <div className="container">
+        <div className="container mt-5">
 
             <h1>Signup</h1>
 
             <form onSubmit={handleSubmit}>
 
                 <input
+                    className="form-control mb-3"
                     type="email"
                     placeholder="email"
                     onChange={(e)=>setEmail(e.target.value)}
                 />
 
                 <input
+                    className="form-control mb-3"
                     type="password"
                     placeholder="password"
                     onChange={(e)=>setPassword(e.target.value)}
                 />
 
-                <button type="submit">
+                <button className="btn btn-success" type="submit">
                     Create account
                 </button>
 

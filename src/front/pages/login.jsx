@@ -11,7 +11,9 @@ export const Login = () => {
 
         e.preventDefault()
 
-        const resp = await fetch(process.env.BACKEND_URL + "/api/login", {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+        const resp = await fetch(backendUrl + "/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -26,32 +28,32 @@ export const Login = () => {
 
         sessionStorage.setItem("token", data.token)
 
-        console.log("token guardado", data.token)
-
         navigate("/private")
     }
 
     return (
 
-        <div className="container">
+        <div className="container mt-5">
 
             <h1>Login</h1>
 
             <form onSubmit={handleSubmit}>
 
                 <input
+                    className="form-control mb-3"
                     type="email"
                     placeholder="email"
                     onChange={(e)=>setEmail(e.target.value)}
                 />
 
                 <input
+                    className="form-control mb-3"
                     type="password"
                     placeholder="password"
                     onChange={(e)=>setPassword(e.target.value)}
                 />
 
-                <button type="submit">
+                <button className="btn btn-primary" type="submit">
                     Login
                 </button>
 

@@ -8,7 +8,9 @@ export const Private = () => {
 
         const token = sessionStorage.getItem("token");
 
-        const resp = await fetch(process.env.BACKEND_URL + "/api/private", {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+        const resp = await fetch(backendUrl + "/api/private", {
             method: "GET",
             headers: {
                 "Authorization": "Bearer " + token
@@ -25,9 +27,9 @@ export const Private = () => {
     }, []);
 
     return (
-        <div className="container">
+        <div className="container mt-5">
 
-            <h1>Private Page 🔒</h1>
+            <h1>🔒 Private Page</h1>
 
             <p>{message}</p>
 

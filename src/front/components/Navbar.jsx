@@ -1,3 +1,6 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 export const Navbar = () => {
 
     const navigate = useNavigate();
@@ -10,9 +13,11 @@ export const Navbar = () => {
 
     return (
 
-        <nav className="navbar navbar-light bg-light">
+        <nav className="navbar navbar-light bg-light px-3">
 
-            <span className="navbar-brand mb-0 h1">My App</span>
+            <span className="navbar-brand mb-0 h1">
+                🔐 Auth App
+            </span>
 
             <div>
 

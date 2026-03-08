@@ -1,8 +1,7 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 
-import { Layout } from "./layout";
-
+import { Layout } from "./pages/layout";
 import { Signup } from "./pages/signup";
 import { Login } from "./pages/login";
 import { Private } from "./pages/private";
@@ -10,33 +9,26 @@ import { Home } from "./pages/home";
 
 import { PrivateRoute } from "./components/PrivateRoute";
 
-export const AppRoutes = () => {
-	return (
-		<BrowserRouter>
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
 
-			<Routes>
+      { index: true, element: <Home /> },
 
-				<Route path="/" element={<Layout />}>
+      { path: "/signup", element: <Signup /> },
 
-					<Route index element={<Home />} />
+      { path: "/login", element: <Login /> },
 
-					<Route path="/signup" element={<Signup />} />
+      {
+        path: "/private",
+        element:
+          <PrivateRoute>
+            <Private />
+          </PrivateRoute>
+      }
 
-					<Route path="/login" element={<Login />} />
-
-					<Route 
-						path="/private" 
-						element={
-							<PrivateRoute>
-								<Private />
-							</PrivateRoute>
-						} 
-					/>
-
-				</Route>
-
-			</Routes>
-
-		</BrowserRouter>
-	);
-};
+    ]
+  }
+]);
