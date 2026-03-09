@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
 from api.models import db
 from api.routes import api
@@ -22,6 +23,9 @@ static_file_dir = os.path.join(
 # 🔹 Crear la app
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+
+# 🔹 ACTIVAR CORS (para permitir conexión con React)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # 🔹 Configuración JWT
 app.config["JWT_SECRET_KEY"] = "super-secret-key-change-this"
