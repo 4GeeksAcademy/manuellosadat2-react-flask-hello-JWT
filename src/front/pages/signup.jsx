@@ -8,27 +8,38 @@ export const Signup = () => {
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
-
         e.preventDefault()
 
-        const backendUrl = import.meta.env.VITE_BACKEND_URL
+        try {
 
-        const resp = await fetch(backendUrl + "/api/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email,
-                password
+            const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+            const resp = await fetch(`${backendUrl}/api/signup`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
             })
-        })
 
-        const data = await resp.json()
+            const data = await resp.json()
 
-        console.log(data)
+            console.log("Response:", data)
 
-        navigate("/login")
+            if (resp.ok) {
+                alert("User created successfully!")
+                navigate("/login")
+            } else {
+                alert(data.msg || "Signup failed")
+            }
+
+        } catch (error) {
+            console.error("Signup error:", error)
+            alert("Server error. Check backend.")
+        }
     }
 
     return (
@@ -43,14 +54,18 @@ export const Signup = () => {
                     className="form-control mb-3"
                     type="email"
                     placeholder="email"
+                    value={email}
                     onChange={(e)=>setEmail(e.target.value)}
+                    required
                 />
 
                 <input
                     className="form-control mb-3"
                     type="password"
                     placeholder="password"
+                    value={password}
                     onChange={(e)=>setPassword(e.target.value)}
+                    required
                 />
 
                 <button className="btn btn-success" type="submit">

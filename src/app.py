@@ -1,6 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
@@ -24,8 +25,12 @@ static_file_dir = os.path.join(
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-# 🔹 ACTIVAR CORS (para permitir conexión con React)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# 🔹 CONFIGURACIÓN CORS (ARREGLADO)
+CORS(
+    app,
+    resources={r"/api/*": {"origins": "*"}},
+    supports_credentials=True
+)
 
 # 🔹 Configuración JWT
 app.config["JWT_SECRET_KEY"] = "super-secret-key-change-this"
@@ -56,9 +61,20 @@ setup_commands(app)
 app.register_blueprint(api, url_prefix='/api')
 
 # 🔹 Manejo de errores
+
+
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
+
+
+# 🔹 Manejo manual de preflight (ARREGLA CORS EN CODESPACES)
+@app.after_request
+def apply_cors(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
+    return response
 
 
 # 🔹 Sitemap para desarrollo
