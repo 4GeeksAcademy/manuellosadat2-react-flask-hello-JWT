@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export const Login = () => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+
+    const { login } = useAuth()
 
     const handleSubmit = async (e) => {
 
@@ -13,22 +16,34 @@ export const Login = () => {
 
         const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-        const resp = await fetch(backendUrl + "/api/login", {
+        const resp = await fetch(`${backendUrl}/api/login`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
                 email,
                 password
             })
+
         })
 
         const data = await resp.json()
 
-        sessionStorage.setItem("token", data.token)
+        if (!resp.ok) {
+
+            alert(data.msg)
+            return
+
+        }
+
+        login(data.token)
 
         navigate("/private")
+
     }
 
     return (
@@ -53,12 +68,13 @@ export const Login = () => {
                     onChange={(e)=>setPassword(e.target.value)}
                 />
 
-                <button className="btn btn-primary" type="submit">
+                <button className="btn btn-primary">
                     Login
                 </button>
 
             </form>
 
         </div>
+
     )
 }

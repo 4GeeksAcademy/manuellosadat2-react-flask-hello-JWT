@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
-import { StoreProvider } from './hooks/useGlobalReducer';
+import { AuthProvider } from "./context/AuthContext";
 import { BackendURL } from './components/BackendURL';
 
 const Main = () => {
@@ -18,9 +18,9 @@ const Main = () => {
 
     return (
         <React.StrictMode>
-            <StoreProvider>
-                <RouterProvider router={router}/>
-            </StoreProvider>
+            <AuthProvider>
+                    <RouterProvider router={router}/>
+            </AuthProvider>
         </React.StrictMode>
     );
 }
