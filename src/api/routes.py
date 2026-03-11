@@ -6,7 +6,6 @@ api = Blueprint('api', __name__)
 
 
 # SIGNUP
-
 @api.route('/signup', methods=['POST'])
 def signup():
 
@@ -33,7 +32,6 @@ def signup():
 
 
 # LOGIN
-
 @api.route('/login', methods=['POST'])
 def login():
 
@@ -47,7 +45,7 @@ def login():
     if not user or not user.check_password(password):
         return jsonify({"msg": "Bad email or password"}), 401
 
-    token = create_access_token(identity=user.id)
+    token = create_access_token(identity=str(user.id))
 
     return jsonify({
         "token": token,
@@ -56,14 +54,13 @@ def login():
 
 
 # PRIVATE ROUTE
-
 @api.route('/private', methods=['GET'])
 @jwt_required()
 def private():
 
     user_id = get_jwt_identity()
 
-    user = User.query.get(user_id)
+    user = User.query.get(int(user_id))
 
     return jsonify({
         "message": "Welcome to the private page",
@@ -72,7 +69,6 @@ def private():
 
 
 # TEST
-
 @api.route('/hello', methods=['GET'])
 def hello():
 
